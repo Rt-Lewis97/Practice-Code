@@ -21,19 +21,19 @@ void draw() {
   ellipse(loc2.x, loc2.y, sz2, sz2);
 
   if (loc.dist(loc2) < sz/2 + sz2/2) {
-    if (loc2.x > loc.x) {
+    if (loc.x < loc2.x) {
       vel.x = -abs(vel.x);
-      vel2.x = -abs(vel2.x);
+      vel2.x = abs(vel2.x);
     } else {
       vel.x = abs(vel.x);
-      vel2.x = abs(vel2.x);
+      vel2.x = -abs(vel2.x);
     }
     if (loc2.y > loc.y) {
       vel.y = -abs(vel.y);
-      vel2.y = -abs(vel2.y);
+      vel2.y = abs(vel2.y);
     } else {
       vel.y = abs(vel.y);
-      vel2.y = abs(vel2.y);
+      vel2.y = -abs(vel2.y);
     }
   }
   if (loc.x + sz/2 > width || loc.x - sz/2 < 0) {
