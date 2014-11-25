@@ -1,52 +1,65 @@
-float sz, sz2;
-PVector loc, vel, loc2, vel2;
+int count = 100;
+
+float[] sz = new float[count];
+float[] mass = new float[count];
+PVector[] loc = new PVector[count];
+PVector[] vel = new PVector[count];
+PVector[] acc = new PVector[count];
+int minDiam = 10;
+int maxDiam = 60;
 
 void setup() {
-  sz = 300;
-  sz2 = 200;
   size(800, 800);
-  loc = new PVector(width/2, height/2);
-  vel = PVector.random2D();
-  loc2 = new PVector(100, 100);
-  vel2 = PVector.random2D();
+  for (int i = 0; i< count; i++) {
+    sz[i] = random(minDiam, maxDiam);
+    loc[i] = new PVector(sz[i], width-sz[i], random(sz[i], height-sz[i]));
+    vel[i] = PVector.random2D();
+    acc[i] = new PVector(0, 0);
+    mass[i] = map(sz[i], minDiam, maxDiam, .1, 1.5);
+  }
 }
 
 void draw() {
-
-  loc.add(vel);
-  loc2.add(vel2);
   background(0);
 
-  ellipse(loc.x, loc.y, sz, sz);
-  ellipse(loc2.x, loc2.y, sz2, sz2);
+  for (int i = 0; i < count; i++) { 
+    vel[i].add(acc[i]);
+    loc[i].add(vel[i]);
 
-  if (loc.dist(loc2) < sz/2 + sz2/2) {
-    if (loc.x < loc2.x) {
-      vel.x = -abs(vel.x);
-      vel2.x = abs(vel2.x);
-    } else {
-      vel.x = abs(vel.x);
-      vel2.x = -abs(vel2.x);
+    for (int j = 0; j < count; j++) {
+      if (i!=j) {
+        if (loc[i].dist(loc[j]) < sz[i]/2 + sz[j]/2) {
+          if (loc[i].x < loc[j].x) {    //if ball 1 is to the left of ball 2...
+            vel[i].x = -abs(vel[i].x);
+            vel[j].x = abs(vel[j].x);
+          } else {
+            vel[i].x = abs(vel[i].x);
+            vel[j].x = -abs(vel[j].x);
+          }
+          if (loc[i].y < loc[j].y) {    //if ball 1 is to the left of ball 2...
+            vel[i].y = -abs(vel[i].y);
+            vel[j].y = abs(vel[j].y);
+          } else {
+            vel[i].y = abs(vel[i].y);
+            vel[j].y = -abs(vel[j].y);
+          }
+          vel[i] = PVector.sub(loc[i], loc[j]);      //assign velocity a value based on difference between center points
+          vel[i].normalize();                        //normalize velocity
+          vel[i].div(mass[i]);                       //divide velocity by mass
+        }
+      }
     }
-    if (loc2.y > loc.y) {
-      vel.y = -abs(vel.y);
-      vel2.y = abs(vel2.y);
-    } else {
-      vel.y = abs(vel.y);
-      vel2.y = -abs(vel2.y);
+
+    //draw the ball
+    ellipse(loc[i].x, loc[i].y, sz[i], sz[i]);
+
+    //bounce the ball
+    if (loc[i].x + sz[i]/2 > width || loc[i].x - sz[i]/2 < 0) {
+      vel[i].x *= -1;
     }
-  }
-  if (loc.x + sz/2 > width || loc.x - sz/2 < 0) {
-    vel.x *= -1;
-  }
-  if (loc.y + sz/2 > height || loc.y - sz/2 < 0) {
-    vel.y *= -1;
-  }
-  if (loc2.x + sz2/2 > width || loc2.x - sz2/2 < 0) {
-    vel2.x *= -1;
-  }
-  if (loc2.y + sz2/2 > height || loc2.y - sz2/2 < 0) {
-    vel2.y *= -1;
+    if (loc[i].y + sz[i]/2 > height || loc[i].y - sz[i]/2 < 0) {
+      vel[i].y *= -1;
+    }
   }
 }
 
