@@ -1,15 +1,19 @@
-Gball b;
+Gball[] b = new Gball[100];
 
 void setup() {
   size(800, 800);
-  b = new Gball();
+  for (int i = 0; i < b.length; i++) {
+    b[i] = new Gball();
+  }
 }
 
 void draw() {
   background(0);
-  b.move();
-  b.bounce();
-  b.display();
+  for (int i = 0; i < b.length; i++) {
+    b[i].move();
+    b[i].bounce();
+    b[i].display();
+  }
 }
 
 class Gball {
@@ -17,10 +21,10 @@ class Gball {
   PVector loc, vel, acc;
 
   Gball() {
-    sz = 30;
-    loc = new PVector(width/2, height/2);
-    vel = PVector.random2D();
-    acc = new PVector(2,3);
+    sz = random(5,100);
+    loc = new PVector(random(sz, width -sz), random(height/2));
+    vel = new PVector(0, 0);
+    acc = new PVector(0, .1);
   }
 
   void display() {
@@ -33,16 +37,12 @@ class Gball {
   }
 
   void bounce() {
-    if (loc.x +sz/2 > width || loc.x - sz/2 < 0) {
-      vel.x *= -1;
-    }
-    if (loc.y + sz/2 > height || loc.y - sz/2 < 0) {
-      vel.y *= -1;
+    if (loc.y > height - sz/2) {
+      loc.y = height - sz/2;
+      vel.y = -abs(vel.y);
     }
   }
 }
-
-
 
 
 
