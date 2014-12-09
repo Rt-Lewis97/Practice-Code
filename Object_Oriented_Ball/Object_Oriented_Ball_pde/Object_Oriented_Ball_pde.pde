@@ -1,24 +1,27 @@
-Ball[] bouncers = new Ball[100];
-
+ArrayList<Ball> balls = new ArrayList<Ball>();
+float max = 20;
 void setup() {
   size(800, 800);
-  for (int i = 0; i < bouncers.length; i++) {
-    bouncers[i] = new Ball();
-  }
   colorMode(HSB, 360, 100, 100, 100);
 }
 
 void draw() {
-  background(0);
-  for (int i = 0; i < bouncers.length; i++) {
-    bouncers[i].display();
-    bouncers[i].move();
-    bouncers[i].bounce();
-    for (int j = 0; j < bouncers.length; j++) {
+  balls.add(new Ball());
+  background(0, 0, 100);
+  for (int i = 0; i < balls.size (); i++) {
+    Ball b = balls.get(i);
+    b.display();
+    b.move();
+    b.bounce();
+    for (int j = 0; j < balls.size (); j++) {
       if (i!=j) {
-        bouncers[i].collision(bouncers[j]);
+        Ball b2 = balls.get(j);
+        b.collision(b2);
       }
     }
+  }
+  if (balls.size() > max) {
+    balls.remove(0);
   }
 }
 
@@ -28,15 +31,16 @@ class Ball {
 
   Ball() {
     sz = 50;
-    loc = new PVector(random(0+sz, width/2 - sz), random(0+sz, height/2-sz));
+    loc = new PVector(mouseX, mouseY);
     vel = PVector.random2D();
     hue = random(360);
     sat = 20;
     bright = 100;
-    alpha = 150;
+    alpha = 50;
   }
   void display() {
-    fill(hue, sat, bright, alpha m );
+    fill(hue, sat, bright, alpha);
+    stroke(300);
     ellipse(loc.x, loc.y, sz, sz);
   }
 
