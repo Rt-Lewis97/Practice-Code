@@ -1,12 +1,11 @@
 ArrayList<Ball> balls = new ArrayList<Ball>();
-float max = 20;
+float max = 50;
 void setup() {
   size(800, 800);
   colorMode(HSB, 360, 100, 100, 100);
 }
 
 void draw() {
-  balls.add(new Ball());
   background(0, 0, 100);
   for (int i = 0; i < balls.size (); i++) {
     Ball b = balls.get(i);
@@ -19,9 +18,6 @@ void draw() {
         b.collision(b2);
       }
     }
-  }
-  if (balls.size() > max) {
-    balls.remove(0);
   }
 }
 
@@ -37,7 +33,8 @@ class Ball {
     sat = 20;
     bright = 100;
     alpha = 50;
-  }
+println("I am a loser");  
+}
   void display() {
     fill(hue, sat, bright, alpha);
     stroke(300);
@@ -62,5 +59,9 @@ class Ball {
       vel.normalize();
     }
   }
+}
+void mousePressed() {
+
+  balls.add(new Ball());
 }
 
