@@ -36,7 +36,7 @@ class Ball {
     alpha = 150;
   }
   void display() {
-    fill(hue, sat, bright, alpha m );
+    fill(hue, sat, bright, alpha);
     ellipse(loc.x, loc.y, sz, sz);
   }
 
