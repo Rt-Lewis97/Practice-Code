@@ -1,5 +1,7 @@
 //Set up particle system
 ArrayList<Particle> part = new ArrayList<Particle>();
+ArrayList<Smallpart> piece = new ArrayList<Smallpart>();
+
 
 //Variables used outside the particle
 float sz = 40; 
@@ -16,7 +18,7 @@ void draw() {
 
   // Slow down insert rate
   if (frameCount%20 == 0) {
-    part.add(new Particle(mouseX, mouseY, random(-1, 1), random(-1, 1)));
+    part.add(new Particle());
   }
 
   //Create initial balls
@@ -29,14 +31,19 @@ void draw() {
     if (p.bottom()) {
 
       fill(20, 50, 100);
-      part.add(new Particle(p.loc.x, p.loc.y, random(-1, 1), -5));
-      part.add(new Particle(p.loc.x, p.loc.y, random(-1, 1), -5));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+      piece.add(new Smallpart(p.loc.x, p.loc.y));
+
       part.remove(p);
-      for (int j = part.size ()-1; j>=0; j--) {
-        Particle d = part.get(j);
-        d.display2();
-        d.move();
-      }
+    }
+    for (int j = piece.size ()-1; j>=0; j--) {
+      Smallpart d = piece.get(j);
+      d.display();
+      d.move();
     }
   }
 
@@ -50,10 +57,10 @@ class Particle {
   PVector loc, vel, acc;
   float sz, lifespan, alpha;
 
-  Particle(float x, float y, float z, float f) {
+  Particle() {
     acc = new PVector(0, .1);
-    vel = new PVector(z, f);
-    loc = new PVector(x, y);
+    vel = new PVector(random(-1, 1), random(-1, 1));
+    loc = new PVector(mouseX, mouseY);
     sz = 40;
     alpha = 120;
   }
@@ -69,18 +76,36 @@ class Particle {
     alpha --;
   }
 
-  void display2() {
-    fill(22, 98, 99, alpha);
-    ellipse(loc.x, loc.y, sz/2, sz/2);
-    alpha --;
-  }
-
   boolean bottom() {
     if (loc.y+sz/2 > height) {
       return true;
     } else {
       return false;
     }
+  }
+}
+
+class Smallpart {
+  PVector loc, vel, acc;
+  float sz, lifespan, alpha;
+
+  Smallpart(float x, float y) {
+    acc =  new PVector(random(-.1, .1), .1);
+    vel = new PVector(random(-1, 1), -8);
+    loc = new PVector(x, y);
+    sz = 20;
+    alpha = 80;
+  }
+
+  void move() {
+    vel.add(acc);
+    loc.add(vel);
+  }
+
+  void display() {
+    fill(22, 98, 99, alpha);
+    ellipse(loc.x, loc.y, sz/2, sz/2);
+    alpha --;
   }
 }
 
