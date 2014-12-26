@@ -1,4 +1,4 @@
-//Set up particle system
+//Set up particle systems
 ArrayList<Particle> part = new ArrayList<Particle>();
 ArrayList<Smallpart> piece = new ArrayList<Smallpart>();
 
@@ -14,7 +14,7 @@ void setup() {
 }
 
 void draw() {
-  background(0, 0, 100);
+  background(0, 0, 0);
 
   // Slow down insert rate
   if (frameCount%20 == 0) {
@@ -27,7 +27,8 @@ void draw() {
     p.display();
     p.move();
 
-    //Create new balls and remove old ones when they hit the bottom
+    //Create new balls and then remove old ones when the old balls hit the bottom
+   
     if (p.bottom()) {
 
       fill(20, 50, 100);
@@ -36,10 +37,12 @@ void draw() {
       piece.add(new Smallpart(p.loc.x, p.loc.y));
       piece.add(new Smallpart(p.loc.x, p.loc.y));
       piece.add(new Smallpart(p.loc.x, p.loc.y));
-      piece.add(new Smallpart(p.loc.x, p.loc.y));
 
       part.remove(p);
     }
+    
+    //Run the new balls
+    
     for (int j = piece.size ()-1; j>=0; j--) {
       Smallpart d = piece.get(j);
       d.display();
@@ -47,11 +50,14 @@ void draw() {
     }
   }
 
-  // set a maximum amount of balls
+  //Set a maximum amount of balls
+  
   if (part.size() > max) {
     part.remove(0);
   }
 }
+
+//Initial ball class
 
 class Particle {
   PVector loc, vel, acc;
@@ -76,6 +82,8 @@ class Particle {
     alpha --;
   }
 
+//Allowing the system to know if the balls hit the bottom
+
   boolean bottom() {
     if (loc.y+sz/2 > height) {
       return true;
@@ -85,11 +93,16 @@ class Particle {
   }
 }
 
+//Setting up the smaller balls
+
 class Smallpart {
   PVector loc, vel, acc;
   float sz, lifespan, alpha;
 
   Smallpart(float x, float y) {
+    
+    //random vectors so the "explosion" is unique each time
+    
     acc =  new PVector(random(-.1, .1), .1);
     vel = new PVector(random(-1, 1), -8);
     loc = new PVector(x, y);
